@@ -249,6 +249,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
     <div class="rating-sec">
       <div class="rating-lbl">Relevance Score (1 = not useful / 5 = very useful)</div>
+      <div id="savedNotice" style="display:none;background:#ebf8ff;border:1px solid #90cdf4;border-radius:6px;padding:6px 12px;font-size:0.82rem;color:#2c5282;margin-bottom:8px;">
+        &#128393; <strong>Your saved answer: <span id="savedScore"></span></strong> — click any button to change.
+      </div>
+      <div id="noAnswerNotice" style="background:#fff8f0;border:1px solid #fbd38d;border-radius:6px;padding:6px 12px;font-size:0.82rem;color:#744210;margin-bottom:8px;">
+        &#9744; Not yet rated — click a button below.
+      </div>
       <div class="rbtns">
         <button class="rbtn" data-score="1" onclick="setScore(1)">1</button>
         <button class="rbtn" data-score="2" onclick="setScore(2)">2</button>
@@ -355,6 +361,17 @@ function render() {
   document.getElementById('notesArea').value = r ? (r.notes || '') : '';
   document.getElementById('badge').textContent = r ? '✓ Rated' : '';
   document.getElementById('badge').className = r ? 'badge' : '';
+
+  const savedNotice = document.getElementById('savedNotice');
+  const noAnswerNotice = document.getElementById('noAnswerNotice');
+  if (r && r.score) {
+    savedNotice.style.display = 'block';
+    document.getElementById('savedScore').textContent = r.score + ' — ' + SCORE_DESC[r.score];
+    noAnswerNotice.style.display = 'none';
+  } else {
+    savedNotice.style.display = 'none';
+    noAnswerNotice.style.display = 'block';
+  }
 
   document.getElementById('prevBtn').disabled = cur === 0;
   document.getElementById('nextBtn').disabled = cur === PAIRS.length - 1;
